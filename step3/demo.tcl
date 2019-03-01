@@ -15,5 +15,5 @@ vsim -voptargs="+acc" -sv_lib $UVM_DPI_DIR work.top_tb
 log -r /*
 radix 16
 
-run 1us
+run 1ms
 
