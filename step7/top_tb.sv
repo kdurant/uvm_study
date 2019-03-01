@@ -5,6 +5,7 @@ import uvm_pkg::*;
 `include "my_if.sv"
 `include "my_transaction.sv"
 `include "my_driver.sv"
+`include "my_env.sv"
 
 module top_tb;
 
@@ -52,13 +53,14 @@ initial begin
    rst_n = 1'b1;
 end
 
-initial begin
-    run_test("my_driver");
+initial 
+begin
+    run_test("my_env");
 end
 
 initial
 begin
-    uvm_config_db#(virtual my_if)::set(null, "uvm_test_top", "vif", input_if);
+    uvm_config_db#(virtual my_if)::set(null, "uvm_test_top.dr1v", "vif", input_if);
 end
 
 endmodule

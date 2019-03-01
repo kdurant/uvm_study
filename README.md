@@ -1,7 +1,6 @@
 # uvm_study
 uvm study step-by-step
 
-
 # step1 对uvm有基本的认识.
 
 1. UVM第一原则是:验证平台中的所有组件都派生自UVM中的类
@@ -46,14 +45,19 @@ my_if output_if
     .rst_n    (    rst_n    )
 );
 ```
+
 2. bulid_phase
     * build_phase在new函数之后main_phase之前执行。
     * 在build_phase中主要通过config_db的set和get操作来传递一些数据，以及实例化成员变量等
     * build_phase是一个函数phase，而main_phase是一个任务phase
     * build_phase是不消耗仿真时间的。build_phase总是在仿真时间（$time函数打印出的时间）为0时执行。
 
-3. uvm_config_db
-    * set和get函数的第三个参数必须一致
+3. [uvm_config_db](https://www.cnblogs.com/YINBin/p/6833533.html)
+    * 第一个和第二个参数联合起来组成目标路径，与此路径符合的目标才能收信
+    * 第三个参数表示一个记号，用以说明这个值是传给目标中的哪个成员的
+        - set和get函数的第三个参数必须一致
+    * 第四个参数是要设置的值
+
     * set函数的第四个参数表示要将哪个interface通过config_db传递给my_driver
     ```verilog
     uvm_config_db#(virtual my_if)::set(null, "uvm_test_top", "vif", input_if);
@@ -64,3 +68,33 @@ my_if output_if
 4. 无论传递给run_test的参数是什么，创建的实例的名字都为uvm_test_top
 
 # step5 加入transaction
+transaction 某种意义上和一个完整的数据帧类似
+
+1. 在driver中某个任务完成对transaction数据的驱动
+2. main_phase调用具体的任务
+
+# step6 容器类uvm_env
+
+1. build_phase的执行遵照树根到树叶的顺序
+```verilog
+initial 
+begin
+    run_test("my_env");
+end
+
+initial
+begin
+    uvm_config_db#(virtual my_if)::set(null, "uvm_test_top.drv", "vif", input_if);
+end
+
+// uvm_test_top (my_env)
+// my_env里例化了"drv"
+```
+
+
+# step7 加入monitor
+
+验证平台必须监测DUT的行为，只有知道DUT的输入输出信号变化之后，才能根据这些信号变化来判定DUT的行为是否正确。
+
+验证平台中实现监测DUT行为的组件是monitor。driver负责把transaction级别的数据转变成DUT的端口级别，并驱动给DUT，monitor的行为与其相对，用于收集DUT的端口数据，并将其转换成transaction交给后续的组件如reference model、scoreboard等处理。
+
