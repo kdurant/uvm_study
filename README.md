@@ -46,11 +46,11 @@ my_if output_if
 );
 ```
 
-2. bulid_phase
-    * build_phase在new函数之后main_phase之前执行。
-    * 在build_phase中主要通过config_db的set和get操作来传递一些数据，以及实例化成员变量等
-    * build_phase是一个函数phase，而main_phase是一个任务phase
-    * build_phase是不消耗仿真时间的。build_phase总是在仿真时间（$time函数打印出的时间）为0时执行。
+2. build_phase
+    * build_phase 在new函数之后main_phase之前执行。
+    * 在build_phase 中主要通过config_db的set和get操作来传递一些数据，以及实例化成员变量等
+    * build_phase 是一个函数phase，而main_phase是一个任务phase
+    * build_phase 是不消耗仿真时间的。build_phase 总是在仿真时间（$time函数打印出的时间）为0时执行。
 
 3. [uvm_config_db](https://www.cnblogs.com/YINBin/p/6833533.html)
     * 第一个和第二个参数联合起来组成目标路径，与此路径符合的目标才能收信
@@ -68,14 +68,14 @@ my_if output_if
 4. 无论传递给run_test的参数是什么，创建的实例的名字都为uvm_test_top
 
 # step5 加入transaction
-transaction 某种意义上和一个完整的数据帧类似
+transaction 某种意义上和一个完整的数据帧类似或者说某段时间内总线上需要信号的集合
 
 1. 在driver中某个任务完成对transaction数据的驱动
 2. main_phase调用具体的任务
 
 # step6 容器类uvm_env
 
-1. build_phase的执行遵照树根到树叶的顺序
+1. build_phase 的执行遵照树根到树叶的顺序
 ```verilog
 initial 
 begin
@@ -98,3 +98,18 @@ end
 
 验证平台中实现监测DUT行为的组件是monitor。driver负责把transaction级别的数据转变成DUT的端口级别，并驱动给DUT，monitor的行为与其相对，用于收集DUT的端口数据，并将其转换成transaction交给后续的组件如reference model、scoreboard等处理。
 
+1. 有两个monitor, 一个检测输入端口, 一个检测输出端口
+2. monitor 和 driver 代码高度相似, 其本至是因为二者处理的是同一种协议
+
+3. top_tb -> my_env -> my_driver/my_monitor
+
+# step8 加入agent
+
+1. top_tb -> my_env -> my_agent -> my_driver/my_monitor
+
+# step9 加入reference model
+1. reference model用于完成和DUT相同的功能
+2. reference model的输出被scoreboard接收，用于和DUT的输出相比较
+3. DUT如果很复杂，那么reference model也会相当复杂
+
+* uvm_analysis_port
