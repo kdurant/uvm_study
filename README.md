@@ -113,3 +113,20 @@ end
 3. DUT如果很复杂，那么reference model也会相当复杂
 
 * uvm_analysis_port
+
+# step10 加入scoreboard
+1. 比较的数据一是来源于reference model，二是来源于o_agt的monitor。前者通过exp_port获取，而后者通过act_port获取
+
+# step11 加入field_automation机制
+作用?
+
+# step12 加入sequencer
+1. sequence 用于产生激励
+
+# step13 sequence机制
+1. sequence 不属于验证平台的任何一部分, 但和 sequencer 关系密切
+2. 只有在sequencer的帮助下，sequence产生出的transaction才能最终送给driver
+3. sequencer只有在sequence出现的情况下才能体现其价值，如果没有sequence，sequencer就几乎没有任何作用
+4. sequence就像是一个弹夹，里面的子弹是transaction，而sequencer是一把枪。弹夹只有放入枪中才有意义，枪只有在放入弹夹后才能发挥威力。
+
+## `uvm_do
