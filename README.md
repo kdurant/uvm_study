@@ -34,6 +34,7 @@ end
 # step4 使用virtual interface
 
 1. 使用interface时需要先例化, 例化的格式和module一致
+
 ```verilog
 my_if input_if
 (
@@ -77,6 +78,13 @@ transaction 某种意义上和一个完整的数据帧类似或者说某段时�
 
 # step6 容器类uvm_env
 * 包含所有组件, 通过对容器的例化, 就可以实现对所有组件的例化
+* 在env的build_phase中加入组件
+```verilog
+    virtual function void build_phase(uvm_phase phase);
+        super.build_phase(phase);
+        drv = my_driver::type_id::creat("drv", this);
+    endfunction
+```
 * build_phase 的执行遵照树根到树叶的顺序
 ```verilog
 initial 
@@ -100,14 +108,15 @@ end
 
 验证平台中实现监测DUT行为的组件是monitor。driver负责把transaction级别的数据转变成DUT的端口级别，并驱动给DUT，monitor的行为与其相对，用于收集DUT的端口数据，并将其转换成transaction交给后续的组件如reference model、scoreboard等处理。
 
-1. 有两个monitor, 一个检测输入端口, 一个检测输出端口
-2. monitor 和 driver 代码高度相似, 其本至是因为二者处理的是同一种协议
+* 有两个monitor, 一个检测输入端口, 一个检测输出端口
+* monitor 和 driver 代码高度相似, 其本至是因为二者处理的是同一种协议
 
-3. top_tb -> my_env -> my_driver/my_monitor
+* top_tb -> my_env -> my_driver/my_monitor
 
 # step8 加入agent
 
-1. top_tb -> my_env -> my_agent -> my_driver/my_monitor
+* top_tb -> my_env -> my_agent -> my_driver/my_monitor
+* `is_active`是uvm_agent的一个成员变量
 
 # step9 加入reference model
 1. reference model用于完成和DUT相同的功能
