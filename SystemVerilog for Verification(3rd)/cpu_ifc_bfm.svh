@@ -43,7 +43,42 @@ interface Utopia ();
     (
         input clav,
         inout selected,
-        output clk_in, clk_out, ATMCell, data, soc, en, valid
+        output clk_in, clk_out, ATMCell, data, soc, en, valid, reset, ready
     );
 
+    // 使用modport的模块端口方向和modport里声明的一致
+    modport CoreReceive
+    (
+        input clk_in, data, sc, clav, ready, reset,
+        output clk_out, en, ATMCell, valid
+    );
+
+    // 使用modport的模块端口方向和modport里声明的一致
+    modport CoreTransmit
+    (
+        input clk_in, clav, ATMCell, valid, reset
+        output clk_out, data, soc, en, ready
+    );
+
+    clocking cbr @ (negedge clk_out);
+        input   clk_in, clk_out, ATMCell, valid, reset, en, ready;
+        output  data, soc, clav;
+    endclocking
+
+    // 使用modport的模块端口方向和modport里声明的一致
+    modport TB_Rx
+    (
+        clocking cbr
+    );
+
+    clocking cbt @ (negedge clk_out);
+        input clk_out, clk_in, ATMCell, soc, en, valid, reset, data, ready;
+        output clav;
+    endclocking
+
+    modport TB_Tx ( clocking cbr);
 endinterface
+
+typdef virtual Utopia vUtopia;
+typdef virtual Utopia.TB_Rx vUtopiaRx;
+typdef virtual Utopia.TB_Tx vUtopiaTx;

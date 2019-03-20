@@ -23,6 +23,8 @@ initial begin
 end
 ```
 
+> run_test是在uvm_globals.svh中定义的一个task，用于启动UVM。
+
 * `uvm_component_utils()`
 
 # step3 raise_objection机制
@@ -116,12 +118,14 @@ end
 # step8 加入agent
 
 * top_tb -> my_env -> my_agent -> my_driver/my_monitor
-* `is_active`是uvm_agent的一个成员变量
+* `is_active`是uvm_agent的一个成员变量, 默认值是`UVM_ACTIVE`
+    - UVM_PASSIVE 表示agent是passive模式, 只能例化monitor
+    - UVM_ACTIVE 表示agent既有激励也有监测功能
 
 # step9 加入reference model
-1. reference model用于完成和DUT相同的功能
-2. reference model的输出被scoreboard接收，用于和DUT的输出相比较
-3. DUT如果很复杂，那么reference model也会相当复杂
+* reference model用于完成和DUT相同的功能
+* reference model的输出被scoreboard接收，用于和DUT的输出相比较
+* DUT如果很复杂，那么reference model也会相当复杂
 
 * uvm_analysis_port
 * uvm_tlm_analysis_fifo, 参数化类
