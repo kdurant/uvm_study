@@ -29,7 +29,7 @@ task my_driver::main_phase(uvm_phase phase);
     vif.valid <= 1'b0;
     while(!vif.rst_n)
     @(posedge vif.clk);
-    for(int i = 0; i < 256; i++)begin
+    for(int i = 0; i < 6; i++)begin
         @(posedge vif.clk);
         vif.data <= $urandom_range(0, 255);
         vif.valid <= 1'b1;

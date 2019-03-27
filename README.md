@@ -35,7 +35,7 @@ end
 
 # step4 使用virtual interface
 
-1. 使用interface时需要先例化, 例化的格式和module一致
+* 使用interface时需要先例化, 例化的格式和module一致
 
 ```verilog
 my_if input_if
@@ -51,13 +51,16 @@ my_if output_if
 );
 ```
 
-2. build_phase
+* build_phase
     * build_phase 在new函数之后main_phase之前执行。
     * 在build_phase 中主要通过config_db的set和get操作来传递一些数据，以及实例化成员变量等
     * build_phase 是一个函数phase，而main_phase是一个任务phase
     * build_phase 是不消耗仿真时间的。build_phase 总是在仿真时间（$time函数打印出的时间）为0时执行。
 
-3. [uvm_config_db](https://www.cnblogs.com/YINBin/p/6833533.html)
+* `uvm_test_top`, 顶级实例名, 无论传递给run_test的参数是什么，创建的实例的名字都为uvm_test_top
+
+* [uvm_config_db](https://www.cnblogs.com/YINBin/p/6833533.html)
+    * 作用是把验证环境的一些资源配置为类似全局变量一样，使得它对于整个验证环境来说是可见的。最常见的是在验证环境顶层通过它对一些组件进行配置，组件可以在建立的阶段读取这些配置实现组件不同工作模式的切换
     * 第一个和第二个参数联合起来组成目标路径，与此路径符合的目标才能收信
     * 第三个参数表示一个记号，用以说明这个值是传给目标中的哪个成员的
         - set和get函数的第三个参数必须一致
@@ -70,13 +73,12 @@ my_if output_if
     ```
     * get函数的第四个参数表示把得到的interface传递给哪个my_driver的成员变量
 
-4. 无论传递给run_test的参数是什么，创建的实例的名字都为uvm_test_top
 
 # step5 加入transaction
 transaction 某种意义上和一个完整的数据帧类似或者说某段时间内总线上需要信号的集合
 
-1. 在driver中某个任务完成对transaction数据的驱动
-2. main_phase调用具体的任务
+* transaction 只是作为一个类对象, 在driver中某个任务完成对transaction数据的驱动
+* main_phase调用具体的任务
 
 # step6 容器类uvm_env
 * 包含所有组件, 通过对容器的例化, 就可以实现对所有组件的例化
@@ -146,3 +148,5 @@ end
 4. sequence就像是一个弹夹，里面的子弹是transaction，而sequencer是一把枪。弹夹只有放入枪中才有意义，枪只有在放入弹夹后才能发挥威力。
 
 ## `uvm_do
+
+# step14(2.4.3) 使用默认sequence

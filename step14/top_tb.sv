@@ -3,7 +3,15 @@
 
 import uvm_pkg::*;
 `include "my_if.sv"
+`include "my_transaction.sv"
+`include "my_sequencer.sv"
 `include "my_driver.sv"
+`include "my_monitor.sv"
+`include "my_model.sv"
+`include "my_agent.sv"
+`include "my_scoreboard.sv"
+`include "my_sequence.sv"
+`include "my_env.sv"
 
 module top_tb;
 
@@ -51,14 +59,16 @@ initial begin
    rst_n = 1'b1;
 end
 
-initial begin
-    run_test("my_driver");
+initial 
+begin
+    run_test("my_env");
 end
 
 initial
 begin
-    // 
-    uvm_config_db#(virtual my_if)::set(null, "uvm_test_top", "vif", input_if);
+    uvm_config_db#(virtual my_if)::set(null, "uvm_test_top.i_agt.drv", "vif", input_if);
+    uvm_config_db#(virtual my_if)::set(null, "uvm_test_top.i_agt.mon", "vif", input_if);
+    uvm_config_db#(virtual my_if)::set(null, "uvm_test_top.o_agt.mon", "vif", output_if);
 end
 
 endmodule
