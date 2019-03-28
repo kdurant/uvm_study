@@ -3,7 +3,7 @@
 class my_monitor extends uvm_monitor;
     virtual my_if vif;
 
-    uvm_analysis_port #(my_transaction) ap;
+    uvm_analysis_port #(my_transaction) ap;  // 声明一个句柄
 
     `uvm_component_utils(my_monitor);
     function new(string name = "my_monitor", uvm_component parent = null);
@@ -15,7 +15,7 @@ class my_monitor extends uvm_monitor;
         if(!uvm_config_db#(virtual my_if)::get(this, "", "vif", vif))
             `uvm_fatal("my_monitor", "virtual interface must be set for vif!!!");
 
-        ap = new("ap", this);
+        ap = new("ap", this);   // 对象分配空间
     endfunction
 
     extern task main_phase(uvm_phase phase);

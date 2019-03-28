@@ -30,6 +30,7 @@ endclass
 
 function void my_env::connect_phase(uvm_phase phase);
     super.connect_phase(phase);
+    // 将analysis_port和blocking_get_export通过此FIFO相连
     i_agt.ap.connect(agt_mdl_fifo.analysis_export);
     mdl.port.connect(agt_mdl_fifo.blocking_get_export);
 endfunction
