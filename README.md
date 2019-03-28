@@ -24,6 +24,7 @@ end
 ```
 
 > run_test是在uvm_globals.svh中定义的一个task，用于启动UVM。
+> 可以在run_test 里指定参数或者通过命令行参数`+UVM_TESTNAME`来指定
 
 * `uvm_component_utils()`
 
